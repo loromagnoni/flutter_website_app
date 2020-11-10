@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "435567462800",
+    "firebase_url": "https://flutter-website-3527b.firebaseio.com",
+    "project_id": "flutter-website-3527b",
+    "storage_bucket": "flutter-website-3527b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435567462800:android:9bef381aa582bebce94b15",
+        "android_client_info": {
+          "package_name": "com.lorenzoroma.flutter_website_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435567462800-mudd2421r5b7tlptubjh2v5mfqiut9n0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5k-0VANCQkWjY9_qBoghuj1XTks3O0Ns"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435567462800-mudd2421r5b7tlptubjh2v5mfqiut9n0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

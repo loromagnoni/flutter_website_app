@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_website_app/providers/books_provider.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
+import 'package:flutter_website_app/screens/loading.dart';
+import 'package:flutter_website_app/screens/login.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -10,13 +13,12 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProjectsProvider()),
         ChangeNotifierProvider(create: (_) => BooksProvider()),
       ],
-      child: MyApp(),
+      child: MaterialApp(home: MyApp()),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   final Future<FirebaseApp> _firebaseInitialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
@@ -24,8 +26,9 @@ class MyApp extends StatelessWidget {
         future: _firebaseInitialization,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            return LoginScreen();
           } else {
-            return Container();
+            return LoadingScreen();
           }
         });
   }
