@@ -4,21 +4,31 @@ import 'package:flutter_website_app/providers/books_provider.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
 import 'package:flutter_website_app/screens/loading.dart';
 import 'package:flutter_website_app/screens/login.dart';
+import 'package:flutter_website_app/screens/management.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProjectsProvider()),
         ChangeNotifierProvider(create: (_) => BooksProvider()),
       ],
-      child: MaterialApp(home: MyApp()),
+      child: MaterialApp(
+        initialRoute: MyApp.routeName,
+        routes: {
+          MyApp.routeName: (context) => MyApp(),
+          ManagementScreen.routeName: (context) => ManagementScreen(),
+        },
+      ),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  static const String routeName = '/';
+
   final Future<FirebaseApp> _firebaseInitialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
