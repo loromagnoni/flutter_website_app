@@ -16,6 +16,27 @@ void main() {
         ChangeNotifierProvider(create: (_) => BooksProvider()),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+            brightness: Brightness.dark,
+            primaryColor: Color(0xFF00FFC2),
+            accentColor: Color(0xFF00FFC2),
+            textTheme: TextTheme(
+              headline1: TextStyle(
+                  color: Color(0xFF00FFC2),
+                  fontFamily: 'Montserrat',
+                  fontSize: 28,
+                  fontWeight: FontWeight.w700),
+              headline2: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600),
+              bodyText1: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
+            )),
         initialRoute: MyApp.routeName,
         routes: {
           MyApp.routeName: (context) => MyApp(),
