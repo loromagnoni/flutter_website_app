@@ -12,6 +12,19 @@ class _LoginFormState extends State<LoginForm> {
   final _formData = {};
   final FocusNode _emailNode = FocusNode();
   final FocusNode _passwordNode = FocusNode();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailNode.dispose();
+    _passwordNode.dispose();
+  }
+
+  void _onEmailFieldSubmit() {
+    _emailNode.unfocus();
+    FocusScope.of(context).requestFocus(_passwordNode);
+  }
 
   void _submit(BuildContext context) {
     _removeKeyboard(context);
@@ -21,8 +34,15 @@ class _LoginFormState extends State<LoginForm> {
   void _trySignIn(BuildContext context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      _signIn(context);
+
+      _manageSignInState(context);
     }
+  }
+
+  void _manageSignInState(BuildContext context) async {
+    setState(() => _isLoading = true);
+    await _signIn(context);
+    setState(() => _isLoading = false);
   }
 
   void _removeKeyboard(BuildContext context) {
@@ -32,6 +52,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _signIn(BuildContext context) async {
+    await Future.delayed(Duration(seconds: 3));
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
@@ -61,43 +82,64 @@ class _LoginFormState extends State<LoginForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _LoginTitle(),
-            _Email(
-                emailNode: _emailNode,
-                passwordNode: _passwordNode,
-                formData: _formData),
+            _Email(onFieldSubmit: _onEmailFieldSubmit, formData: _formData),
             _Password(
                 passwordNode: _passwordNode,
                 formData: _formData,
                 onSubmit: _submit),
-            _LoginButton(onSubmit: _submit)
+            _LoginButton(onSubmit: _submit, isLoading: _isLoading)
           ],
         ));
   }
 }
 
-class _LoginButton extends StatelessWidget {
-  const _LoginButton({
+class _LoginTitle extends StatelessWidget {
+  const _LoginTitle({
     Key key,
-    @required Function onSubmit,
-  })  : _onSubmit = onSubmit,
-        super(key: key);
+  }) : super(key: key);
 
-  final Function _onSubmit;
+  @override
+  Widget build(BuildContext context) {
+    return Text('> Login', style: Theme.of(context).textTheme.headline1);
+  }
+}
+
+class _Email extends StatelessWidget {
+  _Email({
+    Key key,
+    @required Function onFieldSubmit,
+    @required Map formData,
+  })  : _formData = formData,
+        _onFieldSubmit = onFieldSubmit,
+        super(key: key);
+  final Function _onFieldSubmit;
+  final Map _formData;
+  final Function _validator = (value) {
+    if (value.isEmpty) {
+      return 'Please enter some text';
+    }
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    return (!regex.hasMatch(value)) ? "Enter a valid email" : null;
+  };
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: RaisedButton(
-        color: Theme.of(context).accentColor,
-        onPressed: () => _onSubmit(context),
-        child: Text(
-          'Submit',
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1
-              .copyWith(color: Colors.black87),
+      child: TextFormField(
+        cursorColor: Theme.of(context).accentColor,
+        cursorWidth: 10.0,
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          labelText: "Enter your email",
         ),
+        validator: _validator,
+        onEditingComplete: _onFieldSubmit,
+        onSaved: (value) => _formData['email'] = value,
       ),
     );
   }
@@ -149,62 +191,48 @@ class _Password extends StatelessWidget {
   }
 }
 
-class _Email extends StatelessWidget {
-  _Email({
+class _LoginButton extends StatelessWidget {
+  const _LoginButton({
     Key key,
-    @required FocusNode emailNode,
-    @required FocusNode passwordNode,
-    @required Map formData,
-  })  : _emailNode = emailNode,
-        _passwordNode = passwordNode,
-        _formData = formData,
+    @required Function onSubmit,
+    @required bool isLoading,
+  })  : _onSubmit = onSubmit,
+        _isLoading = isLoading,
         super(key: key);
 
-  final FocusNode _emailNode;
-  final FocusNode _passwordNode;
-  final Map _formData;
-  final Function _validator = (value) {
-    if (value.isEmpty) {
-      return 'Please enter some text';
-    }
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    return (!regex.hasMatch(value)) ? "Enter a valid email" : null;
-  };
+  final Function _onSubmit;
+  final bool _isLoading;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        focusNode: _emailNode,
-        cursorColor: Theme.of(context).accentColor,
-        cursorWidth: 10.0,
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.emailAddress,
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          labelText: "Enter your email",
-        ),
-        validator: _validator,
-        onFieldSubmitted: (value) {
-          _emailNode.unfocus();
-          FocusScope.of(context).requestFocus(_passwordNode);
-        },
-        onSaved: (value) => _formData['email'] = value,
-      ),
+      child: _isLoading
+          ? _Loading()
+          : RaisedButton(
+              color: Theme.of(context).accentColor,
+              onPressed: () => _onSubmit(context),
+              child: Text(
+                'Submit',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    .copyWith(color: Colors.black87),
+              ),
+            ),
     );
   }
 }
 
-class _LoginTitle extends StatelessWidget {
-  const _LoginTitle({
+class _Loading extends StatelessWidget {
+  const _Loading({
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text('> Login', style: Theme.of(context).textTheme.headline1);
+    return Center(
+        child: SizedBox(
+            height: 20, width: 20, child: CircularProgressIndicator()));
   }
 }

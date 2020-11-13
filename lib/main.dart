@@ -17,6 +17,7 @@ void main() {
       ],
       child: MaterialApp(
         theme: ThemeData(
+            hintColor: Colors.white,
             brightness: Brightness.dark,
             primaryColor: Color(0xFF00FFC2),
             accentColor: Color(0xFF00FFC2),
@@ -31,6 +32,8 @@ void main() {
                   fontFamily: 'Montserrat',
                   fontSize: 20,
                   fontWeight: FontWeight.w600),
+              subtitle1: TextStyle(
+                  fontFamily: 'Montserrat', fontWeight: FontWeight.w600),
               bodyText1: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Montserrat',
