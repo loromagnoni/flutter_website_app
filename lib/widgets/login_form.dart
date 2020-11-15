@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_website_app/screens/management.dart';
+import 'package:flutter_website_app/screens/management/management.dart';
 
 class LoginForm extends StatefulWidget {
   @override

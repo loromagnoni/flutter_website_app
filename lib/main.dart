@@ -4,7 +4,7 @@ import 'package:flutter_website_app/providers/books_provider.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
 import 'package:flutter_website_app/screens/loading.dart';
 import 'package:flutter_website_app/screens/login.dart';
-import 'package:flutter_website_app/screens/management.dart';
+import 'package:flutter_website_app/screens/management/management.dart';
 import 'package:provider/provider.dart';
 
 void main() {

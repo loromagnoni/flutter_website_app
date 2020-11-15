@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_website_app/widgets/custom_drawer.dart';
-import 'package:flutter_website_app/widgets/page_to_display.dart';
-import 'package:flutter_website_app/widgets/projects_list.dart';
+import 'package:flutter_website_app/screens/management/page_to_display.dart';
+import 'package:flutter_website_app/screens/management/projects_page.dart';
 
 class ManagementScreen extends StatefulWidget {
   static const String routeName = '/management';
@@ -14,6 +14,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
 
   void _setPage(PageToDisplay p) {
     setState(() => _page = p);
+    Navigator.of(context).pop();
   }
 
   @override

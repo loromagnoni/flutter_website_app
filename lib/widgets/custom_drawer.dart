@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_app/widgets/page_to_display.dart';
+import 'package:flutter_website_app/screens/management/page_to_display.dart';
+import 'package:flutter_website_app/screens/management/projects_page.dart';
+
+import '../screens/management/books_page.dart';
+import 'drawer_item.dart';
 
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({
@@ -26,11 +30,11 @@ class CustomDrawer extends StatelessWidget {
                 child: Text('Contents',
                     style: Theme.of(context).textTheme.headline1),
                 decoration: BoxDecoration(color: Colors.black)),
-            _DrawerItem(
+            DrawerItem(
                 page: ProjectPage(),
                 selectedPage: _selectedPage,
                 onTapFunction: _onTapFunction),
-            _DrawerItem(
+            DrawerItem(
               page: BooksPage(),
               selectedPage: _selectedPage,
               onTapFunction: _onTapFunction,

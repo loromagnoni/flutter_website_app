@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_app/widgets/page_to_display.dart';
+import 'package:flutter_website_app/screens/management/page_to_display.dart';
 
 class DrawerItem extends StatelessWidget {
   const DrawerItem({
@@ -16,7 +16,7 @@ class DrawerItem extends StatelessWidget {
   final PageToDisplay _page;
   final PageToDisplay _selectedPage;
 
-  bool get _isSelected => _selectedPage == _page;
+  bool get _isSelected => _selectedPage.stringValue == _page.stringValue;
 
   @override
   Widget build(BuildContext context) {

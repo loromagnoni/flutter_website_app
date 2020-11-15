@@ -8,6 +8,7 @@ class FirestoreHelper {
 
   static Project toProject(QueryDocumentSnapshot p) {
     return Project(
+      id: p[_ProjectSchema.ID],
       title: p[_ProjectSchema.TITLE],
       description: p[_ProjectSchema.DESCRIPTION],
       date: (p[_ProjectSchema.DATE]).toDate(),
@@ -26,6 +27,7 @@ class FirestoreHelper {
 }
 
 class _ProjectSchema {
+  static const ID = 'id';
   static const TITLE = 'title';
   static const DESCRIPTION = 'description';
   static const DATE = 'date';

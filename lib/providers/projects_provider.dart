@@ -23,4 +23,6 @@ class ProjectsProvider with ChangeNotifier {
     );
     notifyListeners();
   }
+
+  bool deleteProject() {}
 }
