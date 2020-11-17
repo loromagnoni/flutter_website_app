@@ -6,9 +6,11 @@ class FirestoreHelper {
   static const String FIREBASE_PROJECTS_COLLECTION = 'projects';
   static const String FIREBASE_BOOKS_COLLECTION = 'books';
 
+  static String get booksSortAttribute => _BookSchema.SORT_INDEX;
+
   static Project toProject(QueryDocumentSnapshot p) {
     return Project(
-      id: p[_ProjectSchema.ID],
+      id: p.id,
       title: p[_ProjectSchema.TITLE],
       description: p[_ProjectSchema.DESCRIPTION],
       date: (p[_ProjectSchema.DATE]).toDate(),
@@ -20,14 +22,15 @@ class FirestoreHelper {
 
   static Book toBook(QueryDocumentSnapshot b) {
     return Book(
+      id: b.id,
       title: b[_BookSchema.TITLE],
       imgUrl: b[_BookSchema.IMAGE_URL],
+      sortIndex: b[_BookSchema.SORT_INDEX],
     );
   }
 }
 
 class _ProjectSchema {
-  static const ID = 'id';
   static const TITLE = 'title';
   static const DESCRIPTION = 'description';
   static const DATE = 'date';
@@ -39,4 +42,5 @@ class _ProjectSchema {
 class _BookSchema {
   static const TITLE = 'title';
   static const IMAGE_URL = 'img_url';
+  static const SORT_INDEX = 'sort_index';
 }

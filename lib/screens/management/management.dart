@@ -23,7 +23,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
       onWillPop: () async => false,
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Website Manager"),
+            title: Text(_page.stringValue),
           ),
           drawer: CustomDrawer(selectedPage: _page, onItemTap: _setPage),
           body: AnimatedSwitcher(

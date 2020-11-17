@@ -13,6 +13,7 @@ class ProjectsProvider with ChangeNotifier {
   List<Project> get projects => _projects;
 
   void _fecthProjects() async {
+    _projects = [];
     QuerySnapshot _querySnapshot = await FirebaseFirestore.instance
         .collection(FirestoreHelper.FIREBASE_PROJECTS_COLLECTION)
         .get();
@@ -24,5 +25,18 @@ class ProjectsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool deleteProject() {}
+  Future<bool> deleteProject(Project toDelete) {
+    return FirebaseFirestore.instance
+        .collection(FirestoreHelper.FIREBASE_PROJECTS_COLLECTION)
+        .doc(toDelete.id)
+        .delete()
+        .then((_) {
+      _fecthProjects();
+      return true;
+    }).catchError((_) {
+      _fecthProjects();
+      notifyListeners();
+      return false;
+    });
+  }
 }

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CustomListTile extends StatelessWidget {
+  final Key key;
   final String title;
   final String date;
   final String imgUrl;
   final Function onDismiss;
   final Function onTap;
   CustomListTile(
-      {this.title, this.imgUrl, this.date = "", this.onDismiss, this.onTap});
+      {this.title, this.imgUrl, this.date = "", this.onDismiss, this.onTap})
+      : this.key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
