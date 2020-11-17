@@ -8,6 +8,7 @@ class Project {
   final DateTime date;
   final String youtubeLink;
   final String gitHubLink;
+  int sortIndex;
 
   Project(
       {@required this.id,
@@ -16,5 +17,6 @@ class Project {
       @required this.date,
       @required this.imgUrl,
       this.youtubeLink,
-      this.gitHubLink});
+      this.gitHubLink,
+      @required this.sortIndex});
 }

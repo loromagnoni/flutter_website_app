@@ -17,6 +17,7 @@ class FirestoreHelper {
       imgUrl: p[_ProjectSchema.IMAGE_URL],
       youtubeLink: p[_ProjectSchema.YOUTUBE_URL],
       gitHubLink: p[_ProjectSchema.GITHUB_URL],
+      sortIndex: p[_ProjectSchema.SORT_INDEX],
     );
   }
 
@@ -37,6 +38,7 @@ class _ProjectSchema {
   static const IMAGE_URL = 'img_url';
   static const YOUTUBE_URL = 'youtube_url';
   static const GITHUB_URL = 'github_url';
+  static const SORT_INDEX = 'sort_index';
 }
 
 class _BookSchema {

@@ -22,7 +22,12 @@ class _ProjectList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return ReorderableListView(
+      onReorder: (oldIndex, newIndex) {
+        context
+            .read<ProjectsProvider>()
+            .updateProjectsOrder(oldIndex, newIndex);
+      },
       padding: EdgeInsets.all(8.0),
       children: context
           .watch<ProjectsProvider>()
