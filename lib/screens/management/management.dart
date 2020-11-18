@@ -22,9 +22,12 @@ class _ManagementScreenState extends State<ManagementScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-          appBar: AppBar(
-            title: Text(_page.stringValue),
-          ),
+          appBar: AppBar(title: Text(_page.stringValue), actions: [
+            IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () =>
+                    Navigator.pushNamed(context, _page.addScreenRoute))
+          ]),
           drawer: CustomDrawer(selectedPage: _page, onItemTap: _setPage),
           body: AnimatedSwitcher(
               duration: Duration(milliseconds: 500), child: _page.widget)),

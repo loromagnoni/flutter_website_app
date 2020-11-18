@@ -44,26 +44,28 @@ class ProjectsProvider with ChangeNotifier {
   }
 
   void updateProjectsOrder(oldIndex, newIndex) {
-    if (newIndex > oldIndex) newIndex--;
-    int switching = findIndexBySortIndex(oldIndex);
-    int switched = findIndexBySortIndex(newIndex);
-    FirebaseFirestore.instance
-        .collection(FirestoreHelper.FIREBASE_BOOKS_COLLECTION)
-        .doc(_projects[switching].id)
-        .update({FirestoreHelper.booksSortAttribute: newIndex});
-    FirebaseFirestore.instance
-        .collection(FirestoreHelper.FIREBASE_BOOKS_COLLECTION)
-        .doc(_projects[switched].id)
-        .update({FirestoreHelper.booksSortAttribute: oldIndex});
-    _projects[switching].sortIndex = newIndex;
-    _projects[switched].sortIndex = oldIndex;
+    if (oldIndex > newIndex) {
+      for (int i = newIndex; i < oldIndex; i++) {
+        applyToSortIndex(i, 1);
+      }
+    } else {
+      for (int i = newIndex; i > oldIndex; i--) {
+        applyToSortIndex(i, -1);
+      }
+    }
+    _projects[oldIndex].sortIndex = newIndex;
     notifyListeners();
   }
 
-  int findIndexBySortIndex(int index) {
-    for (int i = 0; i < _projects.length; i++) {
-      if (_projects[i].sortIndex == index) return i;
-    }
-    return -1;
+  void applyToSortIndex(i, delta) {
+    _projects[i].sortIndex += delta;
+    _updateSortIndex(i);
+  }
+
+  void _updateSortIndex(i) {
+    FirebaseFirestore.instance
+        .collection(FirestoreHelper.FIREBASE_PROJECTS_COLLECTION)
+        .doc(_projects[i].id)
+        .update({FirestoreHelper.booksSortAttribute: _projects[i].sortIndex});
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_website_app/models/book.dart';
 
 class BooksProvider with ChangeNotifier {
   BooksProvider() {
-    _fetchBooks();
+    fetchBooks();
   }
 
   List<Book> _books = [];
@@ -15,7 +15,7 @@ class BooksProvider with ChangeNotifier {
     return _books;
   }
 
-  void _fetchBooks() async {
+  Future<void> fetchBooks() async {
     _books = [];
     QuerySnapshot _querySnapshot = await FirebaseFirestore.instance
         .collection(FirestoreHelper.FIREBASE_BOOKS_COLLECTION)
@@ -34,10 +34,10 @@ class BooksProvider with ChangeNotifier {
         .doc(toDelete.id)
         .delete()
         .then((_) {
-      _fetchBooks();
+      fetchBooks();
       return true;
     }).catchError((_) {
-      _fetchBooks();
+      fetchBooks();
       notifyListeners();
       return false;
     });
@@ -45,25 +45,28 @@ class BooksProvider with ChangeNotifier {
 
   void updateBooksOrder(oldIndex, newIndex) {
     if (newIndex > oldIndex) newIndex--;
-    int switching = findIndexBySortIndex(oldIndex);
-    int switched = findIndexBySortIndex(newIndex);
-    FirebaseFirestore.instance
-        .collection(FirestoreHelper.FIREBASE_BOOKS_COLLECTION)
-        .doc(_books[switching].id)
-        .update({FirestoreHelper.booksSortAttribute: newIndex});
-    FirebaseFirestore.instance
-        .collection(FirestoreHelper.FIREBASE_BOOKS_COLLECTION)
-        .doc(_books[switched].id)
-        .update({FirestoreHelper.booksSortAttribute: oldIndex});
-    _books[switching].sortIndex = newIndex;
-    _books[switched].sortIndex = oldIndex;
+    if (oldIndex > newIndex) {
+      for (int i = newIndex; i < oldIndex; i++) {
+        applyToSortIndex(i, 1);
+      }
+    } else {
+      for (int i = newIndex; i > oldIndex; i--) {
+        applyToSortIndex(i, -1);
+      }
+    }
+    applyToSortIndex(oldIndex, newIndex - oldIndex);
     notifyListeners();
   }
 
-  int findIndexBySortIndex(int index) {
-    for (int i = 0; i < _books.length; i++) {
-      if (_books[i].sortIndex == index) return i;
-    }
-    return -1;
+  void applyToSortIndex(i, delta) {
+    _books[i].sortIndex += delta;
+    _updateSortIndex(i);
+  }
+
+  void _updateSortIndex(i) {
+    FirebaseFirestore.instance
+        .collection(FirestoreHelper.FIREBASE_BOOKS_COLLECTION)
+        .doc(_books[i].id)
+        .update({FirestoreHelper.booksSortAttribute: _books[i].sortIndex});
   }
 }

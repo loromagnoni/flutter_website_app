@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website_app/screens/add_book.dart';
+import 'package:refreshable_reorderable_list/refreshable_reorderable_list.dart';
 import 'package:flutter_website_app/models/book.dart';
 import 'package:flutter_website_app/providers/books_provider.dart';
 import 'package:flutter_website_app/screens/management/page_to_display.dart';
@@ -8,6 +10,7 @@ import 'package:provider/provider.dart';
 class BooksPage extends PageToDisplay {
   String get stringValue => 'Books';
   Widget get widget => _BooksList();
+  String get addScreenRoute => AddBookScreen.routeName;
 }
 
 class _BooksList extends StatelessWidget {
@@ -21,19 +24,24 @@ class _BooksList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableListView(
-      onReorder: (oldIndex, newIndex) {
-        context.read<BooksProvider>().updateBooksOrder(oldIndex, newIndex);
-      },
-      padding: EdgeInsets.all(8.0),
-      children: context
-          .watch<BooksProvider>()
-          .books
-          .map((b) => CustomListTile(
-              title: b.title,
-              imgUrl: b.imgUrl,
-              onDismiss: (_) => _deleteBook(context, b)))
-          .toList(),
+    return RefreshIndicator(
+      color: Theme.of(context).accentColor,
+      onRefresh: () => context.read<BooksProvider>().fetchBooks(),
+      child: RefreshableReorderableListView(
+        physics: AlwaysScrollableScrollPhysics(),
+        onReorder: (oldIndex, newIndex) {
+          context.read<BooksProvider>().updateBooksOrder(oldIndex, newIndex);
+        },
+        padding: EdgeInsets.all(8.0),
+        children: context
+            .watch<BooksProvider>()
+            .books
+            .map((b) => CustomListTile(
+                title: b.title,
+                imgUrl: b.imgUrl,
+                onDismiss: (_) => _deleteBook(context, b)))
+            .toList(),
+      ),
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_website_app/providers/books_provider.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
+import 'package:flutter_website_app/screens/add_book.dart';
+import 'package:flutter_website_app/screens/add_project.dart';
 import 'package:flutter_website_app/screens/loading.dart';
 import 'package:flutter_website_app/screens/login.dart';
 import 'package:flutter_website_app/screens/management/management.dart';
@@ -44,6 +46,8 @@ void main() {
         routes: {
           MyApp.routeName: (context) => MyApp(),
           ManagementScreen.routeName: (context) => ManagementScreen(),
+          AddBookScreen.routeName: (context) => AddBookScreen(),
+          AddProjectScreen.routeName: (context) => AddProjectScreen(),
         },
       ),
     ),

@@ -4,10 +4,12 @@ import 'package:flutter_website_app/providers/projects_provider.dart';
 import 'package:flutter_website_app/screens/management/page_to_display.dart';
 import 'package:flutter_website_app/widgets/custom_list_tile.dart';
 import 'package:provider/provider.dart';
+import '../add_project.dart';
 
 class ProjectPage extends PageToDisplay {
   String get stringValue => 'Projects';
   Widget get widget => _ProjectList();
+  String get addScreenRoute => AddProjectScreen.routeName;
 }
 
 class _ProjectList extends StatelessWidget {
