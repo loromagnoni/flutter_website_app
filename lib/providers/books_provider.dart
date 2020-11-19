@@ -15,6 +15,18 @@ class BooksProvider with ChangeNotifier {
     return _books;
   }
 
+  Future<void> addBook(Book toAdd) async {
+    toAdd.sortIndex = _getNewSortIndex();
+    await FirebaseFirestore.instance
+        .collection(FirestoreHelper.FIREBASE_BOOKS_COLLECTION)
+        .add(FirestoreHelper.fromBookToMap(toAdd));
+    fetchBooks();
+  }
+
+  int _getNewSortIndex() {
+    return _books.length;
+  }
+
   Future<void> fetchBooks() async {
     _books = [];
     QuerySnapshot _querySnapshot = await FirebaseFirestore.instance

@@ -19,4 +19,16 @@ class Project {
       this.youtubeLink,
       this.gitHubLink,
       @required this.sortIndex});
+
+  static Project fromMap(Map map) {
+    return Project(
+        id: map["id"],
+        title: map["title"],
+        imgUrl: map["img_url"],
+        description: map["description"],
+        date: map["date"],
+        youtubeLink: map["youtube_link"],
+        gitHubLink: map["github_link"],
+        sortIndex: map["sortIndex"]);
+  }
 }

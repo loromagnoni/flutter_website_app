@@ -5,7 +5,7 @@ import 'package:flutter_website_app/models/project.dart';
 
 class ProjectsProvider with ChangeNotifier {
   ProjectsProvider() {
-    _fecthProjects();
+    fecthProjects();
   }
 
   List<Project> _projects = [];
@@ -15,7 +15,7 @@ class ProjectsProvider with ChangeNotifier {
     return _projects;
   }
 
-  void _fecthProjects() async {
+  Future<void> fecthProjects() async {
     _projects = [];
     QuerySnapshot _querySnapshot = await FirebaseFirestore.instance
         .collection(FirestoreHelper.FIREBASE_PROJECTS_COLLECTION)
@@ -28,16 +28,26 @@ class ProjectsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addProject(Project toAdd) async {
+    toAdd.sortIndex = _getNewSortIndex();
+    await FirebaseFirestore.instance
+        .collection(FirestoreHelper.FIREBASE_PROJECTS_COLLECTION)
+        .add(FirestoreHelper.fromProjectToMap(toAdd));
+    fecthProjects();
+  }
+
+  int _getNewSortIndex() => _projects.length;
+
   Future<bool> deleteProject(Project toDelete) {
     return FirebaseFirestore.instance
         .collection(FirestoreHelper.FIREBASE_PROJECTS_COLLECTION)
         .doc(toDelete.id)
         .delete()
         .then((_) {
-      _fecthProjects();
+      fecthProjects();
       return true;
     }).catchError((_) {
-      _fecthProjects();
+      fecthProjects();
       notifyListeners();
       return false;
     });

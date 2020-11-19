@@ -29,6 +29,26 @@ class FirestoreHelper {
       sortIndex: b[_BookSchema.SORT_INDEX],
     );
   }
+
+  static fromBookToMap(Book b) {
+    return {
+      _BookSchema.TITLE: b.title,
+      _BookSchema.IMAGE_URL: b.imgUrl,
+      _BookSchema.SORT_INDEX: b.sortIndex,
+    };
+  }
+
+  static fromProjectToMap(Project p) {
+    return {
+      _ProjectSchema.TITLE: p.title,
+      _ProjectSchema.IMAGE_URL: p.imgUrl,
+      _ProjectSchema.SORT_INDEX: p.sortIndex,
+      _ProjectSchema.YOUTUBE_URL: p.youtubeLink,
+      _ProjectSchema.GITHUB_URL: p.gitHubLink,
+      _ProjectSchema.DESCRIPTION: p.description,
+      _ProjectSchema.DATE: p.date,
+    };
+  }
 }
 
 class _ProjectSchema {

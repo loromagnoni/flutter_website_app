@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_website_app/models/project.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
+import 'package:flutter_website_app/screens/add_project/add_project.dart';
 import 'package:flutter_website_app/screens/management/page_to_display.dart';
 import 'package:flutter_website_app/widgets/custom_list_tile.dart';
 import 'package:provider/provider.dart';
-import '../add_project.dart';
+import 'package:refreshable_reorderable_list/refreshable_reorderable_list.dart';
 
 class ProjectPage extends PageToDisplay {
   String get stringValue => 'Projects';
@@ -24,7 +25,11 @@ class _ProjectList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableListView(
+    return RefreshIndicator(
+      color: Theme.of(context).accentColor,
+      onRefresh: ()=> context.read<ProjectsProvider>().fecthProjects(),
+      child: RefreshableReorderableListView(
+        physics: AlwaysScrollableScrollPhysics(),
       onReorder: (oldIndex, newIndex) {
         context
             .read<ProjectsProvider>()

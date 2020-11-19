@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Book {
-  final String id;
-  final String title;
-  final String imgUrl;
+  String id;
+  String title;
+  String imgUrl;
   int sortIndex;
 
   Book(
@@ -11,4 +11,12 @@ class Book {
       @required this.title,
       @required this.imgUrl,
       @required this.sortIndex});
+
+  static Book fromMap(Map map) {
+    return Book(
+        id: map["id"],
+        title: map["title"],
+        imgUrl: map["imgUrl"],
+        sortIndex: map["sortIndex"]);
+  }
 }
