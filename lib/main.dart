@@ -19,6 +19,7 @@ void main() {
       ],
       child: MaterialApp(
         theme: ThemeData(
+            primarySwatch: Colors.teal,
             hintColor: Colors.white,
             brightness: Brightness.dark,
             primaryColor: Color(0xFF00FFC2),

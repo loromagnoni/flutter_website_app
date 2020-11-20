@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_website_app/models/book.dart';
 import 'package:flutter_website_app/models/project.dart';
-import 'package:flutter_website_app/providers/books_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -201,10 +200,27 @@ class _Date extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(children: [
-        Text(_formData["date"] == null
-            ? "Select a date"
-            : _formData["date"].toString()),
-        RaisedButton(onPressed: () => _pickDate(context), child: Text("Pick"))
+        Expanded(
+          child: Text(
+              _formData["date"] == null
+                  ? "Select a date"
+                  : DateFormat("dd-MM-yyyy").format(_formData["date"]),
+              style: Theme.of(context).textTheme.bodyText1),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: RaisedButton(
+            color: Theme.of(context).accentColor,
+            onPressed: () => _pickDate(context),
+            child: Text(
+              'Pick',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Colors.black87),
+            ),
+          ),
+        )
       ]),
     );
   }

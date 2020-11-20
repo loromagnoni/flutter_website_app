@@ -27,27 +27,28 @@ class _ProjectList extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       color: Theme.of(context).accentColor,
-      onRefresh: ()=> context.read<ProjectsProvider>().fecthProjects(),
+      onRefresh: () => context.read<ProjectsProvider>().fecthProjects(),
       child: RefreshableReorderableListView(
         physics: AlwaysScrollableScrollPhysics(),
-      onReorder: (oldIndex, newIndex) {
-        context
-            .read<ProjectsProvider>()
-            .updateProjectsOrder(oldIndex, newIndex);
-      },
-      padding: EdgeInsets.all(8.0),
-      children: context
-          .watch<ProjectsProvider>()
-          .projects
-          .map(
-            (p) => CustomListTile(
-              title: p.title,
-              date: p.date.toIso8601String(),
-              imgUrl: p.imgUrl,
-              onDismiss: (_) => _deleteProject(context, p),
-            ),
-          )
-          .toList(),
+        onReorder: (oldIndex, newIndex) {
+          context
+              .read<ProjectsProvider>()
+              .updateProjectsOrder(oldIndex, newIndex);
+        },
+        padding: EdgeInsets.all(8.0),
+        children: context
+            .watch<ProjectsProvider>()
+            .projects
+            .map(
+              (p) => CustomListTile(
+                title: p.title,
+                date: p.date.toIso8601String(),
+                imgUrl: p.imgUrl,
+                onDismiss: (_) => _deleteProject(context, p),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }
