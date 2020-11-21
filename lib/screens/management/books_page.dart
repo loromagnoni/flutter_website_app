@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_app/screens/add_book/book_editor.dart';
+import 'package:flutter_website_app/screens/editor/editor_book/book_editor.dart';
 import 'package:refreshable_reorderable_list/refreshable_reorderable_list.dart';
 import 'package:flutter_website_app/models/book.dart';
 import 'package:flutter_website_app/providers/books_provider.dart';

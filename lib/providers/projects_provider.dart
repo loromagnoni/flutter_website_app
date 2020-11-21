@@ -36,6 +36,14 @@ class ProjectsProvider with ChangeNotifier {
     fecthProjects();
   }
 
+  Future<void> updateProject(Project toAdd) async {
+    await FirebaseFirestore.instance
+        .collection(FirestoreHelper.FIREBASE_PROJECTS_COLLECTION)
+        .doc(toAdd.id)
+        .update(FirestoreHelper.fromProjectToMap(toAdd));
+    fecthProjects();
+  }
+
   int _getNewSortIndex() => _projects.length;
 
   Future<bool> deleteProject(Project toDelete) {

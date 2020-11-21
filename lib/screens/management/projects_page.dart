@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_website_app/models/project.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
-import 'package:flutter_website_app/screens/add_project/add_project.dart';
+import 'package:flutter_website_app/screens/editor/editor_project/project_editor.dart';
 import 'package:flutter_website_app/screens/management/page_to_display.dart';
 import 'package:flutter_website_app/widgets/custom_list_tile.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:refreshable_reorderable_list/refreshable_reorderable_list.dart';
 
 class ProjectPage extends PageToDisplay {
   String get stringValue => 'Projects';
   Widget get widget => _ProjectList();
-  String get addScreenRoute => AddProjectScreen.routeName;
+  String get addScreenRoute => ProjectEditorScreen.routeName;
 }
 
 class _ProjectList extends StatelessWidget {
@@ -21,6 +22,11 @@ class _ProjectList extends StatelessWidget {
         content: Text(success
             ? "Project eliminated succesfully."
             : "Error while eliminating project!")));
+  }
+
+  void _editProject(BuildContext context, Project toEdit) {
+    Navigator.pushNamed(context, ProjectEditorScreen.routeName,
+        arguments: Project.toMap(toEdit));
   }
 
   @override
@@ -42,8 +48,9 @@ class _ProjectList extends StatelessWidget {
             .map(
               (p) => CustomListTile(
                 title: p.title,
-                date: p.date.toIso8601String(),
+                date: DateFormat("dd-MM-yyyy").format(p.date),
                 imgUrl: p.imgUrl,
+                onTap: () => _editProject(context, p),
                 onDismiss: (_) => _deleteProject(context, p),
               ),
             )

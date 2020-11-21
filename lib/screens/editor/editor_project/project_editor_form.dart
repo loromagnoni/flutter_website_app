@@ -1,33 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_website_app/models/project.dart';
+import 'package:flutter_website_app/screens/editor/form_text_field.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
 import 'package:provider/provider.dart';
 
-class AddProjectForm extends StatefulWidget {
+class ProjectEditorForm extends StatefulWidget {
+  final Map _toEdit;
+
+  ProjectEditorForm({toEdit}) : _toEdit = (toEdit) ?? {};
+
   @override
-  _AddProjectFormState createState() => _AddProjectFormState();
+  _ProjectEditorFormState createState() => _ProjectEditorFormState();
 }
 
-class _AddProjectFormState extends State<AddProjectForm> {
+class _ProjectEditorFormState extends State<ProjectEditorForm> {
   final _formKey = GlobalKey<FormState>();
-  final _formData = {};
   final FocusNode _titleNode = FocusNode();
   final FocusNode _descriptionNode = FocusNode();
   final FocusNode _imgUrlNode = FocusNode();
   final FocusNode _youtubeLinkNode = FocusNode();
   final FocusNode _gitHubLinkNode = FocusNode();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _imgUrlController = TextEditingController();
+  final TextEditingController _youtubeLinkController = TextEditingController();
+  final TextEditingController _githubLinkController = TextEditingController();
+  Map _formData;
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMap();
+    _initFields();
+  }
+
+  void _loadMap() => _formData = widget._toEdit;
+
+  void _initFields() {
+    setState(() {
+      _titleController.text = _formData['title'] ?? "";
+      _imgUrlController.text = _formData['img_url'] ?? "";
+      _descriptionController.text = _formData['description'] ?? "";
+      _youtubeLinkController.text = _formData['youtube_link'] ?? "";
+      _githubLinkController.text = _formData['github_link'] ?? "";
+    });
+  }
 
   @override
   void dispose() {
     super.dispose();
     _titleNode.dispose();
+    _titleController.dispose();
     _descriptionNode.dispose();
+    _descriptionController.dispose();
     _youtubeLinkNode.dispose();
+    _youtubeLinkController.dispose();
     _gitHubLinkNode.dispose();
+    _githubLinkController.dispose();
     _imgUrlNode.dispose();
+    _imgUrlController.dispose();
   }
 
   void _onTitleFieldSubmit() {
@@ -50,6 +84,10 @@ class _AddProjectFormState extends State<AddProjectForm> {
     FocusScope.of(context).requestFocus(_gitHubLinkNode);
   }
 
+  void _onGithubLinkFieldSubmit() {
+    _gitHubLinkNode.unfocus();
+  }
+
   void _submit(BuildContext context) {
     _removeKeyboard(context);
     _tryAdd(context);
@@ -65,9 +103,15 @@ class _AddProjectFormState extends State<AddProjectForm> {
 
   void _manageAddState(BuildContext context) async {
     setState(() => _isLoading = true);
-    await _addProject(context);
+    if (_isNewProject) {
+      await _addProject(context);
+    } else {
+      await _updateProject(context);
+    }
     setState(() => _isLoading = false);
   }
+
+  bool get _isNewProject => _formData["id"] == null;
 
   Future<void> _addProject(BuildContext context) async {
     try {
@@ -76,13 +120,24 @@ class _AddProjectFormState extends State<AddProjectForm> {
           .addProject(Project.fromMap(_formData));
       Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
-      _manageAddError(context);
+      _manageFirebaseError(context);
     }
   }
 
-  void _manageAddError(BuildContext context) {
+  Future<void> _updateProject(BuildContext context) async {
+    try {
+      await context
+          .read<ProjectsProvider>()
+          .updateProject(Project.fromMap(_formData));
+      Navigator.of(context).pop();
+    } on FirebaseAuthException catch (e) {
+      _manageFirebaseError(context);
+    }
+  }
+
+  void _manageFirebaseError(BuildContext context) {
     Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text("Error! Cannot add book.")));
+        .showSnackBar(SnackBar(content: Text("Error! Cannot update book.")));
   }
 
   void _removeKeyboard(BuildContext context) {
@@ -99,25 +154,29 @@ class _AddProjectFormState extends State<AddProjectForm> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _FormTextField(
+            FormTextField(
+                controller: _titleController,
                 onFieldSubmit: _onTitleFieldSubmit,
                 focusNode: _titleNode,
                 formData: _formData,
                 formKey: "title",
                 labelText: "Enter project title"),
-            _FormTextField(
+            FormTextField(
+                controller: _descriptionController,
                 focusNode: _descriptionNode,
                 onFieldSubmit: _onDescriptionFieldSubmit,
                 formData: _formData,
                 formKey: "description",
                 labelText: "Enter description"),
-            _FormTextField(
+            FormTextField(
+                controller: _imgUrlController,
                 focusNode: _imgUrlNode,
                 onFieldSubmit: _onImgUrlFieldSubmit,
                 formData: _formData,
                 formKey: "img_url",
                 labelText: "Enter url of image"),
-            _FormTextField(
+            FormTextField(
+              controller: _youtubeLinkController,
               focusNode: _youtubeLinkNode,
               onFieldSubmit: _onYoutubeLinkFieldSubmit,
               formData: _formData,
@@ -125,9 +184,10 @@ class _AddProjectFormState extends State<AddProjectForm> {
               labelText: "Enter youtube link",
               acceptNull: true,
             ),
-            _FormTextField(
+            FormTextField(
+                controller: _githubLinkController,
                 focusNode: _gitHubLinkNode,
-                onFieldSubmit: _onTitleFieldSubmit,
+                onFieldSubmit: _onGithubLinkFieldSubmit,
                 formData: _formData,
                 formKey: "github_link",
                 labelText: "Enter github link",
@@ -136,55 +196,6 @@ class _AddProjectFormState extends State<AddProjectForm> {
             _SaveButton(onSubmit: _submit, isLoading: _isLoading)
           ],
         ));
-  }
-}
-
-class _FormTextField extends StatelessWidget {
-  _FormTextField(
-      {Key key,
-      @required Function onFieldSubmit,
-      @required Map formData,
-      @required String formKey,
-      @required String labelText,
-      @required FocusNode focusNode,
-      acceptNull})
-      : _formData = formData,
-        _formKey = formKey,
-        _labelText = labelText,
-        _onFieldSubmit = onFieldSubmit,
-        _focusNode = focusNode,
-        _acceptNull = acceptNull ?? false,
-        super(key: key);
-  final String _formKey;
-  final bool _acceptNull;
-  final String _labelText;
-  final Function _onFieldSubmit;
-  final FocusNode _focusNode;
-  final Map _formData;
-  final Function _validator = (value) {
-    if (value.isEmpty) {
-      return 'Please enter some text';
-    }
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        focusNode: _focusNode,
-        cursorColor: Theme.of(context).accentColor,
-        cursorWidth: 10.0,
-        textAlign: TextAlign.center,
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          labelText: _labelText,
-        ),
-        validator: _acceptNull ? null : _validator,
-        onEditingComplete: _onFieldSubmit,
-        onSaved: (value) => _formData[_formKey] = value,
-      ),
-    );
   }
 }
 

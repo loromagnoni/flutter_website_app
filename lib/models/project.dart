@@ -29,6 +29,19 @@ class Project {
         date: map["date"],
         youtubeLink: map["youtube_link"],
         gitHubLink: map["github_link"],
-        sortIndex: map["sortIndex"]);
+        sortIndex: map["sort_index"]);
+  }
+
+  static Map toMap(Project p) {
+    return {
+      "id": p.id,
+      "title": p.title,
+      "description": p.description,
+      "img_url": p.imgUrl,
+      "date": p.date,
+      "youtube_link": p.youtubeLink,
+      "github_link": p.gitHubLink,
+      "sort_index": p.sortIndex,
+    };
   }
 }

@@ -1,22 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../mode.dart';
 import 'book_editor_form.dart';
-
-enum Mode {
-  Add,
-  Edit,
-}
-
-extension ModeExtension on Mode {
-  String get stringValue {
-    switch (this) {
-      case Mode.Add:
-        return 'Add';
-      case Mode.Edit:
-        return 'Edit';
-    }
-  }
-}
 
 class BookEditorScreen extends StatelessWidget {
   static const String routeName = '/book-editor';

@@ -36,9 +36,7 @@ class CustomListTile extends StatelessWidget {
           splashColor: Theme.of(context).accentColor,
           child: ListTile(
             title: Text(title),
-            subtitle: Text(
-              date,
-            ),
+            subtitle: Text(date),
             leading: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),

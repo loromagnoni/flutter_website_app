@@ -4,6 +4,8 @@ import 'package:flutter_website_app/models/book.dart';
 import 'package:flutter_website_app/providers/books_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../form_text_field.dart';
+
 class BookEditorForm extends StatefulWidget {
   final Map _toEdit;
 
@@ -114,7 +116,7 @@ class _BookEditorFormState extends State<BookEditorForm> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _FormTextField(
+            FormTextField(
               onFieldSubmit: _onTitleFieldSubmit,
               formData: _formData,
               controller: _titleController,
@@ -122,7 +124,7 @@ class _BookEditorFormState extends State<BookEditorForm> {
               labelText: "Enter title",
               focusNode: _titleNode,
             ),
-            _FormTextField(
+            FormTextField(
               onFieldSubmit: () => _submit(context),
               formData: _formData,
               controller: _imgUrlController,
@@ -133,141 +135,6 @@ class _BookEditorFormState extends State<BookEditorForm> {
             _SaveButton(onSubmit: _submit, isLoading: _isLoading)
           ],
         ));
-  }
-}
-
-class _FormTextField extends StatelessWidget {
-  _FormTextField(
-      {Key key,
-      @required Function onFieldSubmit,
-      @required Map formData,
-      @required String formKey,
-      @required String labelText,
-      @required TextEditingController controller,
-      @required FocusNode focusNode,
-      acceptNull})
-      : _formData = formData,
-        _formKey = formKey,
-        _labelText = labelText,
-        _onFieldSubmit = onFieldSubmit,
-        _focusNode = focusNode,
-        _controller = controller,
-        _acceptNull = acceptNull ?? false,
-        super(key: key);
-  final String _formKey;
-  final bool _acceptNull;
-  final String _labelText;
-  final Function _onFieldSubmit;
-  final FocusNode _focusNode;
-  final Map _formData;
-  final TextEditingController _controller;
-  final Function _validator = (value) {
-    if (value.isEmpty) {
-      return 'Please enter some text';
-    }
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        controller: _controller,
-        focusNode: _focusNode,
-        cursorColor: Theme.of(context).accentColor,
-        cursorWidth: 10.0,
-        textAlign: TextAlign.center,
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          labelText: _labelText,
-        ),
-        validator: _acceptNull ? null : _validator,
-        onEditingComplete: _onFieldSubmit,
-        onSaved: (value) => _formData[_formKey] = value,
-      ),
-    );
-  }
-}
-
-class _Title extends StatelessWidget {
-  _Title(
-      {Key key,
-      @required Function onFieldSubmit,
-      @required Map formData,
-      @required TextEditingController controller})
-      : _formData = formData,
-        _controller = controller,
-        _onFieldSubmit = onFieldSubmit,
-        super(key: key);
-  final Function _onFieldSubmit;
-  final Map _formData;
-  final TextEditingController _controller;
-  final Function _validator = (value) {
-    if (value.isEmpty) {
-      return 'Please enter some text';
-    }
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        controller: _controller,
-        cursorColor: Theme.of(context).accentColor,
-        cursorWidth: 10.0,
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.emailAddress,
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          labelText: "Enter book title",
-        ),
-        validator: _validator,
-        onEditingComplete: _onFieldSubmit,
-        onSaved: (value) => _formData['title'] = value,
-      ),
-    );
-  }
-}
-
-class _ImgUrl extends StatelessWidget {
-  _ImgUrl({
-    Key key,
-    @required FocusNode imgUrlNode,
-    @required Map formData,
-    @required Function onSubmit,
-  })  : _imgUrlNode = imgUrlNode,
-        _formData = formData,
-        _onSubmit = onSubmit,
-        super(key: key);
-
-  final FocusNode _imgUrlNode;
-  final Map _formData;
-  final Function _onSubmit;
-  final Function _validator = (value) {
-    if (value.isEmpty) {
-      return 'Please enter some text';
-    }
-  };
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        focusNode: _imgUrlNode,
-        cursorColor: Theme.of(context).accentColor,
-        cursorWidth: 10.0,
-        enableSuggestions: false,
-        autocorrect: false,
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-          labelText: "Enter book image url",
-        ),
-        validator: _validator,
-        onFieldSubmitted: (_) => _onSubmit(context),
-        onSaved: (value) => _formData['imgUrl'] = value,
-      ),
-    );
   }
 }
 
