@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_website_app/providers/books_provider.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
-import 'package:flutter_website_app/screens/add_book/book_editor.dart';
-import 'package:flutter_website_app/screens/add_project/add_project.dart';
+import 'package:flutter_website_app/screens/editor/editor_book/book_editor.dart';
+import 'package:flutter_website_app/screens/editor/editor_project/project_editor.dart';
 import 'package:flutter_website_app/screens/loading.dart';
 import 'package:flutter_website_app/screens/login.dart';
 import 'package:flutter_website_app/screens/management/management.dart';
@@ -50,11 +50,15 @@ void main() {
               return BookEditorScreen(toEdit: settings.arguments);
             });
           }
+          if (settings.name == ProjectEditorScreen.routeName) {
+            return MaterialPageRoute(builder: (context) {
+              return ProjectEditorScreen(toEdit: settings.arguments);
+            });
+          }
         },
         routes: {
           MyApp.routeName: (context) => MyApp(),
           ManagementScreen.routeName: (context) => ManagementScreen(),
-          AddProjectScreen.routeName: (context) => AddProjectScreen(),
         },
       ),
     ),
