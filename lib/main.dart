@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_website_app/providers/books_provider.dart';
 import 'package:flutter_website_app/providers/projects_provider.dart';
-import 'package:flutter_website_app/screens/add_book/add_book.dart';
+import 'package:flutter_website_app/screens/add_book/book_editor.dart';
 import 'package:flutter_website_app/screens/add_project/add_project.dart';
 import 'package:flutter_website_app/screens/loading.dart';
 import 'package:flutter_website_app/screens/login.dart';
@@ -44,10 +44,16 @@ void main() {
                   fontWeight: FontWeight.w600),
             )),
         initialRoute: MyApp.routeName,
+        onGenerateRoute: (settings) {
+          if (settings.name == BookEditorScreen.routeName) {
+            return MaterialPageRoute(builder: (context) {
+              return BookEditorScreen(toEdit: settings.arguments);
+            });
+          }
+        },
         routes: {
           MyApp.routeName: (context) => MyApp(),
           ManagementScreen.routeName: (context) => ManagementScreen(),
-          AddBookScreen.routeName: (context) => AddBookScreen(),
           AddProjectScreen.routeName: (context) => AddProjectScreen(),
         },
       ),

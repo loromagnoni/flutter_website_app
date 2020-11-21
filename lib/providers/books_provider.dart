@@ -23,6 +23,14 @@ class BooksProvider with ChangeNotifier {
     fetchBooks();
   }
 
+  Future<void> updateBook(Book toAdd) async {
+    await FirebaseFirestore.instance
+        .collection(FirestoreHelper.FIREBASE_BOOKS_COLLECTION)
+        .doc(toAdd.id)
+        .update(FirestoreHelper.fromBookToMap(toAdd));
+    fetchBooks();
+  }
+
   int _getNewSortIndex() {
     return _books.length;
   }

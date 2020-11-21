@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_website_app/screens/add_book/add_book.dart';
+import 'package:flutter_website_app/screens/add_book/book_editor.dart';
 import 'package:refreshable_reorderable_list/refreshable_reorderable_list.dart';
 import 'package:flutter_website_app/models/book.dart';
 import 'package:flutter_website_app/providers/books_provider.dart';
@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class BooksPage extends PageToDisplay {
   String get stringValue => 'Books';
   Widget get widget => _BooksList();
-  String get addScreenRoute => AddBookScreen.routeName;
+  String get addScreenRoute => BookEditorScreen.routeName;
 }
 
 class _BooksList extends StatelessWidget {
@@ -20,6 +20,11 @@ class _BooksList extends StatelessWidget {
         content: Text(success
             ? "Book eliminated succesfully."
             : "Error while eliminating book!")));
+  }
+
+  void _editBook(BuildContext context, Book toEdit) {
+    Navigator.pushNamed(context, BookEditorScreen.routeName,
+        arguments: Book.toMap(toEdit));
   }
 
   @override
@@ -39,6 +44,7 @@ class _BooksList extends StatelessWidget {
             .map((b) => CustomListTile(
                 title: b.title,
                 imgUrl: b.imgUrl,
+                onTap: () => _editBook(context, b),
                 onDismiss: (_) => _deleteBook(context, b)))
             .toList(),
       ),

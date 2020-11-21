@@ -16,7 +16,16 @@ class Book {
     return Book(
         id: map["id"],
         title: map["title"],
-        imgUrl: map["imgUrl"],
-        sortIndex: map["sortIndex"]);
+        imgUrl: map["img_url"],
+        sortIndex: map["sort_index"]);
+  }
+
+  static Map toMap(Book book) {
+    return {
+      "id": book.id,
+      "title": book.title,
+      "img_url": book.imgUrl,
+      "sort_index": book.sortIndex
+    };
   }
 }
