@@ -55,6 +55,7 @@ void main() {
               return ProjectEditorScreen(toEdit: settings.arguments);
             });
           }
+          return null;
         },
         routes: {
           MyApp.routeName: (context) => MyApp(),

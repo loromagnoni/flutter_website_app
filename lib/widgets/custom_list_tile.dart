@@ -38,12 +38,17 @@ class CustomListTile extends StatelessWidget {
             title: Text(title),
             subtitle: Text(date),
             leading: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  border: Border.all(
-                      color: Theme.of(context).accentColor, width: 3),
-                ),
-                child: ClipOval(child: Image.network(imgUrl))),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                border:
+                    Border.all(color: Theme.of(context).accentColor, width: 3),
+              ),
+              child: ClipOval(
+                child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/images/image_placeholder.jpg',
+                    image: imgUrl),
+              ),
+            ),
           ),
         ),
       ),

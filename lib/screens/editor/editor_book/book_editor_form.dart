@@ -83,7 +83,7 @@ class _BookEditorFormState extends State<BookEditorForm> {
     try {
       await context.read<BooksProvider>().addBook(Book.fromMap(_formData));
       Navigator.of(context).pop();
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       _manageFirebaseError(context);
     }
   }
@@ -92,7 +92,7 @@ class _BookEditorFormState extends State<BookEditorForm> {
     try {
       await context.read<BooksProvider>().updateBook(Book.fromMap(_formData));
       Navigator.of(context).pop();
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       _manageFirebaseError(context);
     }
   }

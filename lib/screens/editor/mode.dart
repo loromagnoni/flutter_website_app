@@ -11,5 +11,6 @@ extension ModeExtension on Mode {
       case Mode.Edit:
         return 'Edit';
     }
+    return "";
   }
 }

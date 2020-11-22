@@ -119,7 +119,7 @@ class _ProjectEditorFormState extends State<ProjectEditorForm> {
           .read<ProjectsProvider>()
           .addProject(Project.fromMap(_formData));
       Navigator.of(context).pop();
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       _manageFirebaseError(context);
     }
   }
@@ -130,7 +130,7 @@ class _ProjectEditorFormState extends State<ProjectEditorForm> {
           .read<ProjectsProvider>()
           .updateProject(Project.fromMap(_formData));
       Navigator.of(context).pop();
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       _manageFirebaseError(context);
     }
   }

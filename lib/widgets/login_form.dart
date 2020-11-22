@@ -51,11 +51,10 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  void _signIn(BuildContext context) async {
+  Future<void> _signIn(BuildContext context) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _formData['email'], password: _formData['password']);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _formData['email'], password: _formData['password']);
       Navigator.pushNamed(context, ManagementScreen.routeName);
     } on FirebaseAuthException catch (e) {
       _manageLoginError(e, context);
